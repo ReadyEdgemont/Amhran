@@ -3,6 +3,8 @@
 #pragma once
 
 #include "Faction.h"
+#include "SkillSet.h"
+#include "SkillSetTransient.h"
 #include "GameFramework/Character.h"
 #include "CharacterPlus.generated.h"
 
@@ -29,7 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Combat)
 	ACharacterPlus* MeleeAttackCheckSingle(float AttackRange, float SweepHalfAngle);
 	UFUNCTION(BlueprintCallable, Category = Combat)
-	void Damage(float Amount);
+	void Damage(int32 DamageAmount);
 
 	UFUNCTION(BlueprintPure, Category = Faction)
 	bool IsCharacterHostileToCharacter(ACharacterPlus *Target);
@@ -41,14 +43,38 @@ public:
 
 protected:
 	UFUNCTION()
-	TArray<ACharacterPlus*> MeleeCheck(float AttackRange, float SweepHalfAngle, bool SingleResult);
+	TArray<ACharacterPlus*> MeleeCheck(float AttackRange, int32 SweepHalfAngle, bool SingleResult);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Health;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float Spirit;
+	UPROPERTY(SaveGame)
+	USkillSet* Skills;	//Holds information about every skill & attribute the actor has
+						//The below editable values are simply defaults-- they are not saved
 
-	UPROPERTY(EditAnywhere, Category = "Faction")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
+	int32 MaxHealthOverride;
+	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
+	int32 Health;
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
+	int32 MaxSpiritOverride;
+	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
+	int32 Spirit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Strength;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Dexterity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Constitution;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Intelligence;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Wisdom;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	int32 Charisma;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
+	int32 LightWeapons;
+
+	UPROPERTY(EditAnywhere, SaveGame, Category = "Faction")
 	int32 FactionID;
 	
 	UFaction *staticFaction;

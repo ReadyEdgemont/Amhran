@@ -6,12 +6,14 @@
 
 #define DIALOGUE_PATH "dialogue/en/"
 
+DECLARE_LOG_CATEGORY_EXTERN(ErrorLog, Log, All);
+
 //Channel Definitions
 #define COLLISION_PROJECTILE    ECC_GameTraceChannel1
 
 //Item Type definitions
 #define POTION 0
-#define POISION 1
+#define POISON 1
 #define WEAPON 2
 #define ARMOR 3
 #define BOOK 4
@@ -66,3 +68,12 @@
 #define INSTANT_DETECTION 130 //If at or above this value/sec, pawn will be instantly detected
 
 #define DETECTION_COOLDOWN 3.5 //Detection lost per second after target leaves view (or detection gain is otherwise below minimum)
+
+const double SKILL_EXP_GROWTH = 1.65;
+const int32 SKILL_MULT_GROWTH = 3;
+const int32 SKILL_OFFSET = 65;
+
+#define DEFAULT_WEAPON_SKILL_DMG_MOD 0.3	// Default % damage boost to weapons per level in appropriate skill.		0.3 = 3% / level
+
+#define ABILITY_DEFAULT_VALUE 10			//Default value for ability scores (STR, CON, DEX, etc.)
+#define SKILL_DEFAULT_VALUE 1

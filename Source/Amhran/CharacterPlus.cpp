@@ -10,13 +10,22 @@ ACharacterPlus::ACharacterPlus()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	staticFaction = NewObject<UFaction>();
+
+	Strength = Dexterity = Constitution = Intelligence = Wisdom = Charisma = ABILITY_DEFAULT_VALUE;
+	LightWeapons = SKILL_DEFAULT_VALUE;
 }
 
 // Called when the game starts or when spawned
 void ACharacterPlus::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+			//Initialize the SkillSet
+	USkillSetTransient *transient = NewObject<USkillSetTransient>();
+	transient->makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
+	transient->makeWeaponSkillArray(LightWeapons);
+	//USkillSetTransient *transient = new USkillSetTransient(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma, LightWeapons);
+	//Skills = new USkillSet(&transient);
 }
 
 // Called every frame
@@ -33,7 +42,7 @@ void ACharacterPlus::SetupPlayerInputComponent(class UInputComponent* InputCompo
 
 }
 
-TArray<ACharacterPlus*> ACharacterPlus::MeleeCheck(float AttackRange, float SweepHalfAngle, bool SingleResult)
+TArray<ACharacterPlus*> ACharacterPlus::MeleeCheck(float AttackRange, int32 SweepHalfAngle, bool SingleResult)
 {
 	const FVector StartTrace = GetActorLocation();
 	const FVector ShootDir = GetActorRotation().Vector();
@@ -68,7 +77,7 @@ TArray<ACharacterPlus*> ACharacterPlus::MeleeCheck(float AttackRange, float Swee
 		{
 			FVector resultRelativePos = result->GetActorLocation() - thisPos;
 			resultRelativePos.Normalize();
-			float Angle = abs(FMath::RadiansToDegrees(acosf(FVector::DotProduct(thisForward, resultRelativePos))));
+			int Angle = abs((int)FMath::RadiansToDegrees(acosf(FVector::DotProduct(thisForward, resultRelativePos))));
 			if (Angle <= SweepHalfAngle) //Add any hits within the sweep angle to the out array
 			{
 				if (SingleResult)
@@ -99,14 +108,14 @@ ACharacterPlus* ACharacterPlus::MeleeAttackCheckSingle(float AttackRange, float 
 	return (MeleeCheck(AttackRange, SweepHalfAngle, true))[0];
 }
 
-void ACharacterPlus::Damage(float Amount)
+void ACharacterPlus::Damage(int32 DamageAmount)
 {
-	if (Amount > 0)
+	if (DamageAmount > 0)
 	{
-		Health -= Amount;
-		if (Health <= 0) //Did we kill the NPC?
+		Health -= DamageAmount;
+		if (DamageAmount <= 0) //Did we kill the NPC?
 		{
-			Health = 0;
+			DamageAmount = 0;
 		}
 	}
 }
