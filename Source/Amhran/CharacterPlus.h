@@ -4,7 +4,8 @@
 
 #include "Faction.h"
 #include "SkillSet.h"
-#include "SkillSetTransient.h"
+//#include "SkillSetTransient.h"
+#include "Weapon.h"
 #include "GameFramework/Character.h"
 #include "CharacterPlus.generated.h"
 
@@ -26,10 +27,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category = Combat)
-	TArray<ACharacterPlus*> MeleeAttackCheckMulti(float AttackRange, float SweepHalfAngle);
-	UFUNCTION(BlueprintCallable, Category = Combat)
-	ACharacterPlus* MeleeAttackCheckSingle(float AttackRange, float SweepHalfAngle);
+	UFUNCTION(BlueprintPure, Category = Combat)
+	virtual bool CanAttack() const;
+
 	UFUNCTION(BlueprintCallable, Category = Combat)
 	void Damage(int32 DamageAmount);
 
@@ -42,11 +42,9 @@ public:
 	int32 GetFactionID();
 
 protected:
-	UFUNCTION()
-	TArray<ACharacterPlus*> MeleeCheck(float AttackRange, int32 SweepHalfAngle, bool SingleResult);
 
 	UPROPERTY(SaveGame)
-	USkillSet* Skills;	//Holds information about every skill & attribute the actor has
+	USkillSet *Skills;	//Holds information about every skill & attribute the actor has
 						//The below editable values are simply defaults-- they are not saved
 
 	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
@@ -76,6 +74,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, SaveGame, Category = "Faction")
 	int32 FactionID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+	UWeapon* Weapon;
 	
 	UFaction *staticFaction;
 };

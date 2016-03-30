@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CombatLibrary.h"
 #include "CharacterPlus.h"
 #include "AmhranPlayer.generated.h"
 

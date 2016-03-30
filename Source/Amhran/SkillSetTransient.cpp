@@ -11,8 +11,8 @@ USkillSetTransient::USkillSetTransient() {
 USkillSetTransient::USkillSetTransient(const int32 Strength, const int32 Dexterity, const int32 Constitution,
 	const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons) {
 
-	//makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
-	//makeWeaponSkillArray(LightWeapons);
+	makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
+	makeWeaponSkillArray(LightWeapons);
 }
 
 TArray<UAbility*> USkillSetTransient::getAbilityArray() const {
@@ -41,10 +41,11 @@ void USkillSetTransient::makeAbilityArray(const int32 Strength, const int32 Dext
 }
 
 void USkillSetTransient::makeWeaponSkillArray(const int32 LightWeapons) {
-	weaponSkills.Add(NewObject<UWeaponSkill>());
+	weaponSkills.Add(NewObject<ULightWeapons>());
 	weaponSkills[0]->SetLevel(LightWeapons);
 }
 
 void USkillSetTransient::makeSkillArray(const int32 Smithing) {
-	//skills.Add(new USkill(Smithing));
+	skills.Add(new USkill(Smithing));
+	skills[0]->SetLevel(Smithing);
 }

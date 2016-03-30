@@ -7,12 +7,13 @@
 // Sets default values
 ACharacterPlus::ACharacterPlus()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// TODO: Determine if tick is necessary
 	PrimaryActorTick.bCanEverTick = true;
 	staticFaction = NewObject<UFaction>();
 
 	Strength = Dexterity = Constitution = Intelligence = Wisdom = Charisma = ABILITY_DEFAULT_VALUE;
 	LightWeapons = SKILL_DEFAULT_VALUE;
+	Weapon = NewObject<UWeapon>();
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +26,9 @@ void ACharacterPlus::BeginPlay()
 	transient->makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
 	transient->makeWeaponSkillArray(LightWeapons);
 	//USkillSetTransient *transient = new USkillSetTransient(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma, LightWeapons);
-	//Skills = new USkillSet(&transient);
+	//Skills = new USkillSet(transient);
+	Skills = NewObject<USkillSet>();
+	Skills->assignToTransient(transient);
 }
 
 // Called every frame
@@ -42,70 +45,8 @@ void ACharacterPlus::SetupPlayerInputComponent(class UInputComponent* InputCompo
 
 }
 
-TArray<ACharacterPlus*> ACharacterPlus::MeleeCheck(float AttackRange, int32 SweepHalfAngle, bool SingleResult)
-{
-	const FVector StartTrace = GetActorLocation();
-	const FVector ShootDir = GetActorRotation().Vector();
-	const FVector EndTrace = StartTrace + ShootDir * AttackRange;
-
-
-
-	//  We perform a sphere sweep, checking if there is something in the cylinder that trace creates.
-	static FName WeaponFireTag = FName(TEXT("WeaponTrace"));
-	FCollisionQueryParams TraceParams(WeaponFireTag, true);
-	TraceParams.AddIgnoredActor(this);
-	TraceParams.bTraceAsyncScene = true;
-	TraceParams.bReturnPhysicalMaterial = true;
-
-	//player + V = OBJ -> V = OBJ - player
-	TArray<FHitResult> Hits;
-	GetWorld()->SweepMultiByChannel(Hits, StartTrace, EndTrace, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(AttackRange), TraceParams);
-
-	TArray <ACharacterPlus*> CharacterHits;
-	UClass *StaticCharacter = ACharacterPlus::StaticClass();
-
-	FVector thisForward = GetViewRotation().Vector();
-	FVector thisPos = GetActorLocation();
-
-	size_t minAngle = 181;
-	ACharacterPlus *bestHit = NULL;
-
-	for (size_t i = 0, charaters = 0; i < Hits.Num(); i++) //Pull all CharacterPluses within the given angle to the out array
-	{
-		AActor *result = Hits[i].GetActor();
-		if (result->GetClass()->IsChildOf(StaticCharacter)) //Only process ACharacterPluses
-		{
-			FVector resultRelativePos = result->GetActorLocation() - thisPos;
-			resultRelativePos.Normalize();
-			int Angle = abs((int)FMath::RadiansToDegrees(acosf(FVector::DotProduct(thisForward, resultRelativePos))));
-			if (Angle <= SweepHalfAngle) //Add any hits within the sweep angle to the out array
-			{
-				if (SingleResult)
-				{
-					if (Angle < minAngle)
-					{
-						minAngle = Angle;
-						bestHit = Cast<ACharacterPlus>(result);
-					}
-				}
-				else
-					CharacterHits.Add(Cast<ACharacterPlus>(result));
-			}
-		}
-	}
-	if (SingleResult)
-		CharacterHits.Add(bestHit);
-	return CharacterHits; //NULL if no hit actors
-}
-
-TArray<ACharacterPlus*> ACharacterPlus::MeleeAttackCheckMulti(float AttackRange, float SweepHalfAngle)
-{
-	return MeleeCheck(AttackRange, SweepHalfAngle, false);
-}
-
-ACharacterPlus* ACharacterPlus::MeleeAttackCheckSingle(float AttackRange, float SweepHalfAngle)
-{
-	return (MeleeCheck(AttackRange, SweepHalfAngle, true))[0];
+bool ACharacterPlus::CanAttack() const {
+	return true; // TODO: Fix this shit
 }
 
 void ACharacterPlus::Damage(int32 DamageAmount)

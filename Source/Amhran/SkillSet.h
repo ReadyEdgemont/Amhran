@@ -19,7 +19,7 @@ class AMHRAN_API USkillSet : public UObject
 
 public:
 	USkillSet();
-	//USkillSet(const USkillSetTransient * const Transient);
+	USkillSet(const USkillSetTransient * const Transient);
 
 	UFUNCTION(BlueprintPure, Category = Skills)
 	USkill* GetSkill(FName SkillName);
@@ -28,11 +28,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = Skills)
 	UAbility* GetAbility(FName AbilityName);
 	//USkill& operator[] (std::size_t idx) override;
-
-protected:
 	UFUNCTION()
 	void assignToTransient(const USkillSetTransient * const Transient);
 
+protected:
 	UPROPERTY(EditAnywhere, Category = "Skills")
 	TArray<UWeaponSkill*> WeaponSkills;
 	UPROPERTY(EditAnywhere, Category = "Skills")

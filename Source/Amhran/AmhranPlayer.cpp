@@ -76,31 +76,11 @@ void AAmhranPlayer::OnStopJump()
 
 void AAmhranPlayer::OnFire()
 {
-	// try and fire a projectile
-	if (ProjectileClass != NULL)
-	{
-		// Get the camera transform
-		FVector CameraLoc;
-		FRotator CameraRot;
-		GetActorEyesViewPoint(CameraLoc, CameraRot);
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the camera to find the final muzzle position
-		FVector const MuzzleLocation = CameraLoc + FTransform(CameraRot).TransformVector(MuzzleOffset);
-		FRotator MuzzleRotation = CameraRot;
-		MuzzleRotation.Pitch += 10.0f;          // skew the aim upwards a bit
-		UWorld* const World = GetWorld();
-		if (World)
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = Instigator;
-			// spawn the projectile at the muzzle
-			ATestProjectile* const Projectile = World->SpawnActor<ATestProjectile>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
-			if (Projectile)
-			{
-				// find launch direction
-				FVector const LaunchDir = MuzzleRotation.Vector();
-				Projectile->InitVelocity(LaunchDir);
-			}
-		}
+	ACharacterPlus *hit = NULL;
+	if (CanAttack()) {
+		hit = UCombatLibrary::MeleeAttackCheckSingle(250, 30, this);
+	}
+	if (hit) {
+		UE_LOG(GeneralLog, Log, TEXT("Actor has been hit!"));
 	}
 }
