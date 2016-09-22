@@ -19,6 +19,13 @@ public:
 	static TArray<ACharacterPlus*> MeleeAttackCheckMulti(float AttackRange, float SweepHalfAngle, ACharacterPlus *Instigator);
 	UFUNCTION(BlueprintCallable, Category = Combat)
 	static ACharacterPlus* MeleeAttackCheckSingle(float AttackRange, float SweepHalfAngle, ACharacterPlus *Instigator);
+	UFUNCTION(BlueprintCallable, Category = Combat)
+	static bool Parry(float Range, float SweepHalfAngle, bool CanMultiParry, ACharacterPlus *Instigator);
+
+	UFUNCTION(BlueprintCallable, Category = Skills)
+	int32 ComputeDamageFromRaw(int32 RawDamage, USkillSet* Skills, UWeapon* Weapon);
+	UFUNCTION(BlueprintCallable, Category = Skills)
+	void AddExpFromDamage(int32 DamageDealt, UWeapon* Weapon);
 	
 private:
 	UFUNCTION()

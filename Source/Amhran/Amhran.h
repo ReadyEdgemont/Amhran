@@ -34,14 +34,22 @@ enum class EWeaponTypeEnum : uint8
 UENUM(BlueprintType)
 enum class EArmorTypeEnum : uint8
 {
-	Helmet		UMETA(DisplayName = "Helmet"),
-	Curaiss 	UMETA(DisplayName = "Curaiss"),
-	Greaves		UMETA(DisplayName = "Greaves"),
-	Boots		UMETA(DisplayName = "Boots"),
-	Gauntlets	UMETA(DisplayName = "Gauntlets"),
-	Gloves		UMETA(DisplayName = "Gloves"),
+	Head		UMETA(DisplayName = "Head"),
+	Torso 		UMETA(DisplayName = "Torso"),
+	Arms		UMETA(DisplayName = "Arms"),
+	Hands		UMETA(DisplayName = "Hands"),
+	Legs		UMETA(DisplayName = "Legs"),
+	Feet		UMETA(DisplayName = "Feet"),
 	Ring		UMETA(DisplayName = "Ring"),
-	Amulet		UMETA(DisplayName = "Amulet")
+	Neck		UMETA(DisplayName = "Neck")
+};
+
+UENUM(BlueprintType)
+enum class EArmorCategoryEnum : uint8
+{
+	NoArmor			UMETA(DisplayName = "Clothing"),
+	LightArmor		UMETA(DisplayName = "Light Armor"),
+	HeavyArmor		UMETA(DisplayName = "Heavy Armor")
 };
 
 //Channel Definitions

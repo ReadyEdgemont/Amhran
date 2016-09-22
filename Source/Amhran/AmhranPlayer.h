@@ -25,7 +25,9 @@ protected:
 	UFUNCTION()
 	void OnStopJump();
 	UFUNCTION()
-	void OnFire();
+	void OnFire1();
+	UFUNCTION()
+	void OnFire2();
 
 	//Set up the camera property
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)

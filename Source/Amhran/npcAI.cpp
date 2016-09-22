@@ -85,6 +85,8 @@ float AnpcAI::Detect(ACharacterPlus *target, float ticksPerSec, float Modifier) 
 		if (addDetection >= INSTANT_DETECTION) //Instantly detect pawn
 		{
 			DetInfo->setDetection(100.0);
+			DetectedEnemies.AddUnique(target);
+			endAlert();
 			return 100.0;
 		}
 		else //Tick normally

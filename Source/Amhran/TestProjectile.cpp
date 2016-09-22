@@ -7,7 +7,7 @@
 ATestProjectile::ATestProjectile(const class FObjectInitializer& PCIP)
 	: Super(PCIP)
 {
-	CollisionComp = PCIP.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComp"));
+	/*CollisionComp = PCIP.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComp"));
 	CollisionComp->OnComponentHit.AddDynamic(this, &ATestProjectile::OnHit);
 	CollisionComp->InitSphereRadius(15.0f);
 	RootComponent = CollisionComp;
@@ -17,7 +17,7 @@ ATestProjectile::ATestProjectile(const class FObjectInitializer& PCIP)
 	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
-	ProjectileMovement->Bounciness = 0.3f;
+	ProjectileMovement->Bounciness = 0.3f;*/
 }
 
 void ATestProjectile::InitVelocity(const FVector& ShootDirection)

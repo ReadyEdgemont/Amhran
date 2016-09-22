@@ -8,7 +8,7 @@
 /**
  * 
  */
-UCLASS(Abstract, BlueprintType)
+UCLASS(BlueprintType)
 class AMHRAN_API USkill : public UObject
 {
 	GENERATED_BODY()

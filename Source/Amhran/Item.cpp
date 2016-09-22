@@ -3,6 +3,6 @@
 #include "Amhran.h"
 #include "Item.h"
 
-
-
-
+FName UItem::GetName() {
+	return Name;
+}

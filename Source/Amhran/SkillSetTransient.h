@@ -18,26 +18,31 @@ class AMHRAN_API USkillSetTransient : public UObject
 	
 public:
 	USkillSetTransient();	//Meaningless. DO NOT USE!!!
-	USkillSetTransient(const int32 Strength, const int32 Dexterity, const int32 Constitution,
-			const int32 Intelligence, const int32 Wisdom, const int32 Charism, const int32 LightWeapons);
+	USkillSetTransient(const int32 Level, const int32 Strength, const int32 Dexterity, const int32 Constitution,
+			const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons);
 
 	UFUNCTION()
 	void makeAbilityArray(const int32 Strength, const int32 Dexterity, const int32 Constitution,
-			const int32 Intelligence, const int32 Wisdom, const int32 Charism);
+			const int32 Intelligence, const int32 Wisdom, const int32 Charisma);
 	UFUNCTION()
 	void makeSkillArray(const int32 LightWeapons);
-	UFUNCTION()
-	void makeWeaponSkillArray(const int32 Smithing);
+	/*UFUNCTION()
+	void makeWeaponSkillArray(const int32 Smithing);*/
 
 	UFUNCTION()
 	TArray<UAbility*> getAbilityArray() const;
-	TArray<UWeaponSkill*> getWeaponSkillArray() const;
+	UFUNCTION()
+	TArray<USkill*> getSkillArray() const;
+	//TArray<UWeaponSkill*> getWeaponSkillArray() const;
+
+	UPROPERTY()
+	int32 Level;
 private:
 
 	UPROPERTY()
 	TArray<UAbility*> abilities;
 	UPROPERTY()
-	TArray<UWeaponSkill*> weaponSkills;
-	UPROPERTY()
 	TArray<USkill*> skills;
+	/*TArray<UWeaponSkill*> weaponSkills;
+	UPROPERTY()*/
 };

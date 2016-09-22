@@ -13,11 +13,11 @@ class AMHRAN_API UWeaponSkill : public USkill
 {
 	GENERATED_BODY()
 	
-public:
-	UWeaponSkill();
-	UWeaponSkill(int32 Score);
-	UFUNCTION(BlueprintCallable, Category = Skills)
+//public:
+	//UWeaponSkill();
+	//UWeaponSkill(int32 Score);
+	/*UFUNCTION(BlueprintCallable, Category = Skills)
 	int32 ComputeDamage(int32 RawDamage, int32 Strength);
 	UFUNCTION(BlueprintCallable, Category = Skills)
-	void AddExpFromDamage(int32 DamageDealt);
+	void AddExpFromDamage(int32 DamageDealt);*/
 };

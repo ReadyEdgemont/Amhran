@@ -1,0 +1,30 @@
+Unknown macro: {code}
+<!-- Category name, of your own choosing -->
+<UIElements name="MainMenu">
+
+<!-- Object name, again, of your own choosing -->
+<UIElement name="MainMenu" render_lockless="1">
+
+<!-- Point it to the correct files and give it some default settings -->
+<as3proj file="AmhránMenu1" layer="0">
+<Constraints>
+<Align mode="dynamic" valign="center" halign="center" scale="0" max="0" />
+</Constraints>
+</as3proj>
+
+<!-- Map the function to change the message in the box -->
+<functions>
+<function name="ChangeMessage" funcname="MainMenuClass.ChangeMessage">
+<param name="message" desc="" type="String"/>
+</function>
+</functions>
+
+<!-- Here we will define the event that the buttonClick will generate -->
+<events>
+<event name="OnClick" fscommand="ButtonClickPressed" desc="" />
+</events>
+
+</UIElement>
+
+</UIElements>
+?

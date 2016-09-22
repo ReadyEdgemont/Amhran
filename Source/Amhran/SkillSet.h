@@ -21,23 +21,28 @@ public:
 	USkillSet();
 	USkillSet(const USkillSetTransient * const Transient);
 
-	UFUNCTION(BlueprintPure, Category = Skills)
-	USkill* GetSkill(FName SkillName);
-	UFUNCTION(BlueprintPure, Category = Skills)
-	UWeaponSkill* GetWeaponSkill(FName SkillName);
-	UFUNCTION(BlueprintPure, Category = Skills)
-	UAbility* GetAbility(FName AbilityName);
+
+	UFUNCTION(BlueprintPure, Category = Stats)
+	int32 GetCurrentLevel() const;
+	UFUNCTION(BlueprintPure, Category = Stats)
+	USkill* GetSkill(FName SkillName) const;
+	/*UFUNCTION(BlueprintPure, Category = Skills)
+	UWeaponSkill* GetWeaponSkill(FName SkillName);*/
+	UFUNCTION(BlueprintPure, Category = Stats)
+	UAbility* GetAbility(FName AbilityName) const;
 	//USkill& operator[] (std::size_t idx) override;
 	UFUNCTION()
 	void assignToTransient(const USkillSetTransient * const Transient);
 
 protected:
+	/*UPROPERTY(EditAnywhere, Category = "Skills")
+	TArray<UWeaponSkill*> WeaponSkills;*/
 	UPROPERTY(EditAnywhere, Category = "Skills")
-	TArray<UWeaponSkill*> WeaponSkills;
-	UPROPERTY(EditAnywhere, Category = "Skills")
-	TArray<USkill*> OtherSkills;
+	TArray<USkill*> Skills;
 	UPROPERTY(EditAnywhere, Category = "Abilities")
 	TArray<UAbility*> Abilities;
+	UPROPERTY(EditAnywhere, Category = "Vitals")
+	int32 Level;
 
 	UPROPERTY()
 	TMap<FName, int32> nameDefines;		// Maps the names of skills + abilities to indecies

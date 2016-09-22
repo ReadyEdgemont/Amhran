@@ -8,20 +8,25 @@ USkillSetTransient::USkillSetTransient() {
 	// Don't use this!
 }
 
-USkillSetTransient::USkillSetTransient(const int32 Strength, const int32 Dexterity, const int32 Constitution,
+USkillSetTransient::USkillSetTransient(const int32 Level, const int32 Strength, const int32 Dexterity, const int32 Constitution,
 	const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons) {
 
+	this->Level = Level;
 	makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
-	makeWeaponSkillArray(LightWeapons);
+	makeSkillArray(LightWeapons);
 }
 
 TArray<UAbility*> USkillSetTransient::getAbilityArray() const {
 	return abilities;
 }
 
-TArray<UWeaponSkill*> USkillSetTransient::getWeaponSkillArray() const {
-	return weaponSkills;
+TArray<USkill*> USkillSetTransient::getSkillArray() const {
+	return skills;
 }
+
+/*TArray<UWeaponSkill*> USkillSetTransient::getWeaponSkillArray() const {
+	return weaponSkills;
+}*/
 
 void USkillSetTransient::makeAbilityArray(const int32 Strength, const int32 Dexterity, const int32 Constitution,
 	const int32 Intelligence, const int32 Wisdom, const int32 Charisma) {
@@ -40,12 +45,12 @@ void USkillSetTransient::makeAbilityArray(const int32 Strength, const int32 Dext
 	abilities[5]->SetScore(Charisma);
 }
 
-void USkillSetTransient::makeWeaponSkillArray(const int32 LightWeapons) {
+/*void USkillSetTransient::makeWeaponSkillArray(const int32 LightWeapons) {
 	weaponSkills.Add(NewObject<ULightWeapons>());
 	weaponSkills[0]->SetLevel(LightWeapons);
-}
+}*/
 
-void USkillSetTransient::makeSkillArray(const int32 Smithing) {
-	skills.Add(new USkill(Smithing));
-	skills[0]->SetLevel(Smithing);
+void USkillSetTransient::makeSkillArray(const int32 LightWeapons) {
+	skills.Add(NewObject<USkill>());
+	skills[0]->SetLevel(LightWeapons);
 }

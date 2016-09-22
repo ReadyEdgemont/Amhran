@@ -4,6 +4,7 @@
 #include "SkillSet.h"
 
 USkillSet::USkillSet() {
+	Level = 1;
 	nameDefines.Add(FName("Strength"), 0);
 	nameDefines.Add(FName("Dexterity"), 1);
 	nameDefines.Add(FName("Constitution"), 2);
@@ -19,18 +20,30 @@ USkillSet::USkillSet() {
 }*/
 
 void USkillSet::assignToTransient(const USkillSetTransient * const Transient) {
+	Level = Transient->Level;
 	Abilities = Transient->getAbilityArray();
-	WeaponSkills = Transient->getWeaponSkillArray();
+	Skills = Transient->getSkillArray();
+	//WeaponSkills = Transient->getWeaponSkillArray();
 }
 
-USkill* USkillSet::GetSkill(FName SkillName) {
-	return new USkill(); // TODO: Do something with this?
+int32 USkillSet::GetCurrentLevel() const {
+	return Level;
 }
 
-UWeaponSkill* USkillSet::GetWeaponSkill(FName SkillName) {
+USkill* USkillSet::GetSkill(FName SkillName) const {
+	if(nameDefines.Contains(SkillName))
+		return Skills[nameDefines[SkillName]];
+	UE_LOG(LogTemp, Warning, TEXT("Warning: Attempt to access non-existant Skillname!"));
+	return NULL;
+}
+
+/*UWeaponSkill* USkillSet::GetWeaponSkill(FName SkillName) {
 	return WeaponSkills[nameDefines[SkillName]];
-}
+}*/
 
-UAbility* USkillSet::GetAbility(FName AbilityName) {
-	return Abilities[nameDefines[AbilityName]];
+UAbility* USkillSet::GetAbility(FName AbilityName) const {
+	if (nameDefines.Contains(AbilityName))
+		return Abilities[nameDefines[AbilityName]];
+	UE_LOG(LogTemp, Warning, TEXT("Warning: Attempt to access non-existant Abilityname!"));
+	return NULL;
 }

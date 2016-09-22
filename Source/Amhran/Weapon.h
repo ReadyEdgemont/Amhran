@@ -14,13 +14,16 @@ class AMHRAN_API UWeapon : public UItem
 	GENERATED_BODY()
 public:
 	UWeapon();
-	
+	UFUNCTION()
+		void Init(const UWeapon * other);
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-	int32 Damage;
+	EWeaponTypeEnum WeaponType;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-	int32 Speed;
+	float Damage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-	int32 Range;
+	float Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float Range;
 	// TODO: Add animation file support!!!
 };

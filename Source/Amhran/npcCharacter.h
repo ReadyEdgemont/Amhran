@@ -28,7 +28,7 @@ protected:
 	FName WaypointPath;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-	int32 attackRange;
+	float attackRange;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quests")
 	bool IsImportant;

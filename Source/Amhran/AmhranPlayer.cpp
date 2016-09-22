@@ -10,13 +10,15 @@ AAmhranPlayer::AAmhranPlayer(const class FObjectInitializer& PCIP)
 	FactionID = 0;
 	//Setting up the camera
 	FirstPersonCameraComponent = PCIP.CreateDefaultSubobject<UCameraComponent>(this, TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
+	//FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();			//Obsoleted in 4.13
+	FirstPersonCameraComponent->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules::KeepWorldTransform);
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 50.0f + BaseEyeHeight); //Adjust camera height
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	FirstPersonMesh = PCIP.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("FirstPersonMesh"));
 	FirstPersonMesh->SetOnlyOwnerSee(true);         // only the owning player will see this mesh
-	FirstPersonMesh->AttachParent = FirstPersonCameraComponent;
+	//FirstPersonMesh->AttachParent = FirstPersonCameraComponent;
+	FirstPersonMesh->AttachToComponent(FirstPersonCameraComponent, FAttachmentTransformRules::KeepWorldTransform);
 	FirstPersonMesh->bCastDynamicShadow = false;
 	FirstPersonMesh->CastShadow = false;
 
@@ -32,7 +34,8 @@ void AAmhranPlayer::SetupPlayerInputComponent(UInputComponent* InputComponent)
 	InputComponent->BindAxis("TurnYaw", this, &AAmhranPlayer::AddControllerPitchInput);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AAmhranPlayer::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &AAmhranPlayer::OnStopJump);
-	InputComponent->BindAction("Fire1", IE_Pressed, this, &AAmhranPlayer::OnFire);
+	InputComponent->BindAction("Fire1", IE_Pressed, this, &AAmhranPlayer::OnFire1);
+	InputComponent->BindAction("Fire2", IE_Pressed, this, &AAmhranPlayer::OnFire2);
 }
 
 void AAmhranPlayer::WalkForward(float Value)
@@ -74,13 +77,18 @@ void AAmhranPlayer::OnStopJump()
 	bPressedJump = false;
 }
 
-void AAmhranPlayer::OnFire()
+void AAmhranPlayer::OnFire1()
 {
 	ACharacterPlus *hit = NULL;
-	if (CanAttack()) {
+	if (CanAttack) {
 		hit = UCombatLibrary::MeleeAttackCheckSingle(250, 30, this);
 	}
 	if (hit) {
-		UE_LOG(GeneralLog, Log, TEXT("Actor has been hit!"));
+		hit->Damage(10);
 	}
+}
+
+void AAmhranPlayer::OnFire2() {
+	CharacterPlusNotifiedParryInitiate();
+	UCombatLibrary::Parry(200, 30, false, this);		// TODO: Call this from an AnimMontage, block parry?
 }

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Amhran.h"
 #include "Item.h"
 #include "Armor.generated.h"
 
@@ -12,10 +13,19 @@ UCLASS()
 class AMHRAN_API UArmor : public UItem
 {
 	GENERATED_BODY()
-	
+public:
+	UArmor();
+	UFUNCTION()
+	void Init(const UArmor * other);
+	UFUNCTION()
+	float getProtection() const;
+	UFUNCTION(BlueprintPure, Category = "Equipment")
+	EArmorTypeEnum GetArmorType() const;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Armor)
-	int32 Protection;
+	EArmorTypeEnum ArmorType;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Armor)
+	float Protection;
 	
 	// TODO: Add model support!!!
 	
