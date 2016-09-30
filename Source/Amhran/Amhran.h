@@ -15,6 +15,7 @@ enum class EItemTypeEnum : uint8
 	Weapon		UMETA(DisplayName = "Weapon"),
 	Armor 		UMETA(DisplayName = "Armor"),
 	Potion		UMETA(DisplayName = "Potion"),
+	Poison		UMETA(DisplayName = "Poison"),
 	Book		UMETA(DisplayName = "Book"),
 	Rune		UMETA(DisplayName = "Rune"),
 	Scroll		UMETA(DisplayName = "Scroll"),
@@ -50,6 +51,18 @@ enum class EArmorCategoryEnum : uint8
 	NoArmor			UMETA(DisplayName = "Clothing"),
 	LightArmor		UMETA(DisplayName = "Light Armor"),
 	HeavyArmor		UMETA(DisplayName = "Heavy Armor")
+};
+
+UENUM(BlueprintType)
+enum class EInventoryTabEnum : uint8
+{
+	All				UMETA(DisplayName = "All"),
+	Weapons			UMETA(DisplayName = "Weapons"),
+	Armor			UMETA(DisplayName = "Apparel"),
+	Mixtures		UMETA(DisplayName = "Mixtures"),
+	Scrolls			UMETA(DisplayName = "Scrolls"),
+	Materials		UMETA(DisplayName = "Materials"),
+	Misc			UMETA(DisplayName = "Misc")
 };
 
 //Channel Definitions

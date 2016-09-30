@@ -16,7 +16,7 @@ class AMHRAN_API UArmor : public UItem
 public:
 	UArmor();
 	UFUNCTION()
-	void Init(const UArmor * other);
+	void Init(const UItem * other) override;
 	UFUNCTION()
 	float getProtection() const;
 	UFUNCTION(BlueprintPure, Category = "Equipment")

@@ -7,9 +7,11 @@ UArmor::UArmor() {
 	Type = EItemTypeEnum::Armor;
 }
 
-void UArmor::Init(const UArmor * other) {
-	ArmorType = other->ArmorType;
-	Protection = other->Protection;
+void UArmor::Init(const UItem * other) {
+	Super::Init(other);
+	const UArmor* otherA = Cast<UArmor>(other);
+	ArmorType = otherA->ArmorType;
+	Protection = otherA->Protection;
 }
 
 float UArmor::getProtection() const {

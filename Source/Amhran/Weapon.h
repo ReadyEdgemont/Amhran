@@ -15,7 +15,7 @@ class AMHRAN_API UWeapon : public UItem
 public:
 	UWeapon();
 	UFUNCTION()
-		void Init(const UWeapon * other);
+	void Init(const UItem * other) override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	EWeaponTypeEnum WeaponType;

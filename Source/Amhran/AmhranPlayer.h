@@ -4,6 +4,7 @@
 
 #include "CombatLibrary.h"
 #include "CharacterPlus.h"
+#include "AmhranPlayerController.h"
 #include "AmhranPlayer.generated.h"
 
 /**
@@ -28,6 +29,9 @@ protected:
 	void OnFire1();
 	UFUNCTION()
 	void OnFire2();
+
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Kill() override;
 
 	//Set up the camera property
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)

@@ -17,5 +17,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "User Interface")
 	void CenterMouse();
 	
-	
+	UFUNCTION()
+	void OnKill();
 };

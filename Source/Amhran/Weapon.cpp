@@ -10,9 +10,11 @@ UWeapon::UWeapon() {
 	Range = DEFAULT_WEAPON_RANGE;
 }
 
-void UWeapon::Init(const UWeapon * other) {
-	WeaponType = other->WeaponType;
-	Damage = other->Damage;
-	Speed = other->Speed;
-	Range = other->Range;
+void UWeapon::Init(const UItem * other) {
+	Super::Init(other);
+	const UWeapon* otherW = Cast<UWeapon>(other);
+	WeaponType = otherW->WeaponType;
+	Damage = otherW->Damage;
+	Speed = otherW->Speed;
+	Range = otherW->Range;
 }

@@ -48,6 +48,7 @@ void ACharacterPlus::BeginPlay()
 	Spirit = MaxSpirit;
 
 	initEquips();
+	initInventory();
 
 	CharacterPlusNotifiedParryInitiate();
 }
@@ -64,6 +65,10 @@ void ACharacterPlus::SetupPlayerInputComponent(class UInputComponent* InputCompo
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
+}
+
+AController* ACharacterPlus::GetController() const {
+	return Cast<AController>(Controller);
 }
 
 bool ACharacterPlus::CanAttackQuery() const {
@@ -125,8 +130,12 @@ float ACharacterPlus::GetSpirit() const {
 	return Spirit;
 }
 
+float ACharacterPlus::GetAnimationSpeedMultiplier() const {		// TODO: Make logarithmic
+	return 1 - ((GetAbility("Dexterity")->GetScore() - 10) / 15);
+}
+
 void ACharacterPlus::RecalculateMaxHealth() {
-	MaxHealth = GetAbility("Constitution")->GetScore() * GetCurrentLevel();
+	MaxHealth = 5 + (GetAbility("Constitution")->GetScore() / 2) * GetCurrentLevel();
 }
 
 void ACharacterPlus::RecalculateMaxSpirit() {
@@ -191,6 +200,11 @@ UArmor* ACharacterPlus::GetEquippedNeck() const {
 void ACharacterPlus::initEquips() {
 	Equiped = NewObject<UEquipment>();
 	Equiped->AssignFromLoadout(Loadout);
+}
+
+void ACharacterPlus::initInventory() {
+	Inventory = NewObject<UInventory>();
+	Inventory->AssignFromLoadout(Loadout);
 }
 
 float ACharacterPlus::GetEffectiveArmorValue() const {

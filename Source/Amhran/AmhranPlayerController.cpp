@@ -19,3 +19,8 @@ void AAmhranPlayerController::CenterMouse() {
 		}
 	}
 }
+
+void AAmhranPlayerController::OnKill() {
+	IgnoreMoveInput = true;
+	IgnoreLookInput = true;
+}

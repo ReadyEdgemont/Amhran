@@ -92,3 +92,8 @@ void AAmhranPlayer::OnFire2() {
 	CharacterPlusNotifiedParryInitiate();
 	UCombatLibrary::Parry(200, 30, false, this);		// TODO: Call this from an AnimMontage, block parry?
 }
+
+void AAmhranPlayer::Kill() {
+	Super::Kill();
+	(Cast<AAmhranPlayerController>(GetController()))->OnKill();
+}

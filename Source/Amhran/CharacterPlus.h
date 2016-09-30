@@ -6,6 +6,7 @@
 #include "SkillSet.h"
 //#include "SkillSetTransient.h"
 #include "Equipment.h"
+#include "Inventory.h"
 #include "GameFramework/Character.h"
 #include "CharacterPlus.generated.h"
 
@@ -27,6 +28,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	UFUNCTION()
+	AController* GetController() const;
+
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	virtual bool CanAttackQuery() const;
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")		// Implemented in blueprints
@@ -39,7 +43,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Damage(float DamageAmount);
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void Kill();
+	virtual void Kill();
 
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	int32 GetCurrentLevel() const;
@@ -47,6 +51,10 @@ public:
 	UAbility* GetAbility(FName AbilityName) const;
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	USkill* GetSkill(FName SkillName) const;
+
+	UFUNCTION(BlueprintPure, Category = "Stats")
+	float GetAnimationSpeedMultiplier() const;
+
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	float GetHealthPercentage() const;
 	UFUNCTION(BlueprintPure, Category = "Stats")
@@ -108,10 +116,8 @@ public:
 protected:
 	UFUNCTION()
 	void initEquips();
-	/*UFUNCTION()
-	UArmor* unpackArmor(UClass* armorClass);
 	UFUNCTION()
-	float unpackAndScaleArmor(UClass* armorClass);*/
+	void initInventory();
 
 	UPROPERTY()
 	USkeletalMeshComponent* staticMesh;
@@ -130,29 +136,31 @@ protected:
 	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
 	float Spirit;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Strength;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Dexterity;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Constitution;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Intelligence;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Wisdom;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
 	int32 Charisma;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Skills")
 	int32 LightWeapons;
 
 	UPROPERTY(EditAnywhere, SaveGame, Category = "Faction")
 	int32 FactionID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")		// Point to ULoadout
-	UClass* Loadout;
-	UPROPERTY(BlueprintReadWrite, Category = "Equipment")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+	UClass* Loadout;		// The default equipment & inventory information for this character. Only store a Loadout-derived object here!
+	UPROPERTY(BlueprintReadWrite, SaveGame, Category = "Equipment")
 	UEquipment* Equiped;
+	UPROPERTY(BlueprintReadOnly, SaveGame, Category = "Inventory")
+	UInventory* Inventory;
 	
 	UFaction *staticFaction;
 };

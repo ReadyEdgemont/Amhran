@@ -32,4 +32,6 @@ public:
 		UClass* Ring;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
 		UClass* Neck;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+		TArray<UClass*> Inventory;
 };
