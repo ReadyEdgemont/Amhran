@@ -4,71 +4,81 @@
 #include "Equipment.h"
 #include "Loadout.h"
 
+UEquipment::UEquipment() {
+	Weapon = NULL;
+	Head = Torso = Arms = Hands = Legs = Feet = Ring = Neck = NULL;
+}
+
 void UEquipment::Assign (UEquipment * other) {
-	Weapon = NewObject<UWeapon>();
-	Weapon->Init(other->Weapon);
-
-	Head = NewObject<UArmor>();
-	Head->Init(other->Head);
-
-	Torso = NewObject<UArmor>();
-	Torso->Init(other->Torso);
-
-	Arms = NewObject<UArmor>();
-	Arms->Init(other->Arms);
-
-	Hands = NewObject<UArmor>();
-	Hands->Init(other->Hands);
-
-	Legs = NewObject<UArmor>();
-	Legs->Init(other->Legs);
-
-	Feet = NewObject<UArmor>();
-	Feet->Init(other->Feet);
-
-	Neck = NewObject<UArmor>();
-	Neck->Init(other->Neck);
+	initWeapon(Weapon, other->Weapon);
+	initArmor(Head, other->Head);
+	initArmor(Torso, other->Torso);
+	initArmor(Arms, other->Arms);
+	initArmor(Hands, other->Hands);
+	initArmor(Legs, other->Legs);
+	initArmor(Feet, other->Feet);
+	initArmor(Ring, other->Ring);
+	initArmor(Neck, other->Neck);
 }
 
 void UEquipment::AssignFromLoadout(UClass * other) {
 	ULoadout* loadout = Cast<ULoadout>(other->GetDefaultObject());
 
-	Weapon = NewObject<UWeapon>();
-	initWeapon(Weapon, loadout->Weapon);
-
-	Head = NewObject<UArmor>();
-	initArmor(Head, loadout->Head);
-
-	Torso = NewObject<UArmor>();
-	initArmor(Torso, loadout->Torso);
-
-	Arms = NewObject<UArmor>();
-	initArmor(Arms, loadout->Arms);
-
-	Hands = NewObject<UArmor>();
-	initArmor(Hands, loadout->Hands);
-
-	Legs = NewObject<UArmor>();
-	initArmor(Legs, loadout->Legs);
-
-	Feet = NewObject<UArmor>();
-	initArmor(Feet, loadout->Feet);
-
-	Ring = NewObject<UArmor>();
-	initArmor(Ring, loadout->Ring);
-
-	Neck = NewObject<UArmor>();
-	initArmor(Neck, loadout->Neck);
+	initWeaponU(Weapon, loadout->Weapon);
+	initArmorU(Head, loadout->Head);
+	initArmorU(Torso, loadout->Torso);
+	initArmorU(Arms, loadout->Arms);
+	initArmorU(Hands, loadout->Hands);
+	initArmorU(Legs, loadout->Legs);
+	initArmorU(Feet, loadout->Feet);
+	initArmorU(Ring, loadout->Ring);
+	initArmorU(Neck, loadout->Neck);
 }
 
-void UEquipment::initWeapon(UWeapon* w, UClass* other) {
-	if(other)
-		w->Init(Cast<UWeapon>(other->GetDefaultObject()));
+void UEquipment::EquipU(UClass *ToEquip) {
+	UItem *itemToEquip = Cast<UItem>(ToEquip->GetDefaultObject());
+	Equip(itemToEquip);
 }
 
-void UEquipment::initArmor(UArmor* a, UClass* other) {
-	if (other)
-		a->Init(Cast<UArmor>(other->GetDefaultObject()));
+void UEquipment::Equip(UItem *ToEquip) {
+	UWeapon *wCast = Cast<UWeapon>(ToEquip);
+	if (wCast) {
+		equipWeapon(wCast);
+		return;
+	}
+	UArmor *aCast = Cast<UArmor>(ToEquip);
+	if (aCast) {
+		equipArmor(aCast);
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("WARNING: Attempt to equip non-equippable in UEquipment::Equip!!!"));
+}
+
+UItem* UEquipment::Unequip(EEquipmentTypeEnum Slot) {
+
+	switch (Slot) {
+	case EEquipmentTypeEnum::Weapon:
+		return unequipWeaponSlot(Weapon);
+	case EEquipmentTypeEnum::Head:
+		return unequipArmorSlot(Head);
+	case EEquipmentTypeEnum::Torso:
+		return unequipArmorSlot(Torso);
+	case EEquipmentTypeEnum::Arms:
+		return unequipArmorSlot(Arms);
+	case EEquipmentTypeEnum::Hands:
+		return unequipArmorSlot(Hands);
+	case EEquipmentTypeEnum::Legs:
+		return unequipArmorSlot(Legs);
+	case EEquipmentTypeEnum::Feet:
+		return unequipArmorSlot(Feet);
+	case EEquipmentTypeEnum::Ring:
+		return unequipArmorSlot(Ring);
+	case EEquipmentTypeEnum::Neck:
+		return unequipArmorSlot(Neck);
+	default:
+		UE_LOG(LogTemp, Warning, TEXT("WARNING: Invalid slot detected in UEquipment::Unequip!!!"));
+	};
+	return NULL;
 }
 
 UWeapon* UEquipment::GetWeapon() const{
@@ -99,39 +109,88 @@ UArmor* UEquipment::GetNeck() const {
 	return Neck;
 }
 
-void UEquipment::equipWeapon(UClass *w) {
+void UEquipment::equipWeaponU(UClass *w) {
+	UWeapon *wOther = Cast<UWeapon>(w->GetDefaultObject());
+	equipWeapon(wOther);
+}
+
+void UEquipment::equipArmorU(UClass *a) {
+	UArmor *armor = Cast<UArmor>(a->GetDefaultObject());
+	equipArmor(armor);
+}
+
+void UEquipment::equipWeapon(UWeapon *w) {
 	initWeapon(Weapon, w);
 }
 
-void UEquipment::equipArmor(UClass *a) {
-	UArmor *armor = Cast<UArmor>(a->GetDefaultObject());
-	EArmorTypeEnum aType = armor->GetArmorType();
+void UEquipment::equipArmor(UArmor *a) {
+	EEquipmentTypeEnum aType = a->GetArmorType();
 	switch (aType) {
-	case EArmorTypeEnum::Head:
+	case EEquipmentTypeEnum::Head:
 		initArmor(Head, a);
 		break;
-	case EArmorTypeEnum::Torso:
+	case EEquipmentTypeEnum::Torso:
 		initArmor(Torso, a);
 		break;
-	case EArmorTypeEnum::Arms:
+	case EEquipmentTypeEnum::Arms:
 		initArmor(Arms, a);
 		break;
-	case EArmorTypeEnum::Hands:
+	case EEquipmentTypeEnum::Hands:
 		initArmor(Hands, a);
 		break;
-	case EArmorTypeEnum::Legs:
+	case EEquipmentTypeEnum::Legs:
 		initArmor(Legs, a);
 		break;
-	case EArmorTypeEnum::Feet:
+	case EEquipmentTypeEnum::Feet:
 		initArmor(Feet, a);
 		break;
-	case EArmorTypeEnum::Ring:
+	case EEquipmentTypeEnum::Ring:
 		initArmor(Ring, a);
 		break;
-	case EArmorTypeEnum::Neck:
+	case EEquipmentTypeEnum::Neck:
 		initArmor(Neck, a);
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("WARNING: Invalid ArmorType detected in UEquipment::equipArmor!!!"));
 	};
+}
+
+void UEquipment::initWeaponU(UWeapon * & w, UClass* other) {
+	if (other) {
+		UWeapon *wOther = Cast<UWeapon>(other->GetDefaultObject());
+		initWeapon(w, wOther);
+	}
+}
+
+void UEquipment::initArmorU(UArmor * & a, UClass* other) {
+	if (other) {
+		UArmor *aOther = Cast<UArmor>(other->GetDefaultObject());
+		initArmor(a, aOther);
+	}
+}
+
+void UEquipment::initWeapon(UWeapon * & w, UWeapon* other) {
+	if (other) {
+		w = NewObject <UWeapon>();
+		w->Init(other);
+	}
+}
+
+void UEquipment::initArmor(UArmor * & a, UArmor* other) {
+	if (other) {
+		a = NewObject <UArmor>();
+		a->Init(other);
+	}
+}
+
+UWeapon* UEquipment::unequipWeaponSlot(UWeapon * & wSlot) {
+	UWeapon* oldSlot = wSlot;
+	wSlot = NULL;
+	return oldSlot;
+}
+
+UArmor* UEquipment::unequipArmorSlot(UArmor * & aSlot) {
+	UArmor* oldSlot = aSlot;
+	aSlot = NULL;
+	return oldSlot;
 }

@@ -9,11 +9,12 @@ USkillSetTransient::USkillSetTransient() {
 }
 
 USkillSetTransient::USkillSetTransient(const int32 Level, const int32 Strength, const int32 Dexterity, const int32 Constitution,
-	const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons) {
+		const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons, const int32 Parry, 
+		const int32 Transmutation, const int32 Speechcraft) {
 
 	this->Level = Level;
 	makeAbilityArray(Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma);
-	makeSkillArray(LightWeapons);
+	makeSkillArray(LightWeapons, Parry, Transmutation, Speechcraft);
 }
 
 TArray<UAbility*> USkillSetTransient::getAbilityArray() const {
@@ -50,7 +51,14 @@ void USkillSetTransient::makeAbilityArray(const int32 Strength, const int32 Dext
 	weaponSkills[0]->SetLevel(LightWeapons);
 }*/
 
-void USkillSetTransient::makeSkillArray(const int32 LightWeapons) {
+void USkillSetTransient::makeSkillArray(const int32 LightWeapons, const int32 Parry, const int32 Transmutation, 
+										const int32 Speechcraft) {
 	skills.Add(NewObject<USkill>());
 	skills[0]->SetLevel(LightWeapons);
+	skills.Add(NewObject<USkill>());
+	skills[1]->SetLevel(Parry);
+	skills.Add(NewObject<USkill>());
+	skills[2]->SetLevel(Transmutation);
+	skills.Add(NewObject<USkill>());
+	skills[3]->SetLevel(Speechcraft);
 }

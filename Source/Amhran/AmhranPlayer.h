@@ -4,6 +4,8 @@
 
 #include "CombatLibrary.h"
 #include "CharacterPlus.h"
+#include "npcCharacter.h"
+#include "Inventory.h"
 #include "AmhranPlayerController.h"
 #include "AmhranPlayer.generated.h"
 
@@ -14,6 +16,12 @@ UCLASS()
 class AMHRAN_API AAmhranPlayer : public ACharacterPlus
 {
 	GENERATED_UCLASS_BODY()
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
+	void PlayerNotifiedContainerOpened(UInventory *OpenInventory);
+	UFUNCTION(BlueprintImplementableEvent, Category = "Dialogue")
+	void PlayerNotifiedDialogueInitiated(AnpcCharacter *SpeakingNPC);
+
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
@@ -29,6 +37,8 @@ protected:
 	void OnFire1();
 	UFUNCTION()
 	void OnFire2();
+	UFUNCTION()
+	void OnUse();
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Kill() override;

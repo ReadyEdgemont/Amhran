@@ -13,7 +13,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class AMHRAN_API UInventory : public UObject
 {
 	GENERATED_BODY()
@@ -21,17 +21,20 @@ public:
 	UInventory();
 
 	UFUNCTION()
+	void DEBUGPrintItemCount() const;
+
+	UFUNCTION()
 	void AssignFromLoadout(UClass *other);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void AddItemU(UClass* ToAdd);
+	int32 AddItemU(UClass* ToAdd);
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void AddItemInQuantityU(UClass* ToAdd, int32 Quantity);
+	int32 AddItemInQuantityU(UClass* ToAdd, int32 Quantity);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void AddItem(UItem* ToAdd);
+	int32 AddItem(UItem* ToAdd);
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void AddItemInQuantity(UItem* ToAdd, int32 Quantity);
+	int32 AddItemInQuantity(UItem* ToAdd, int32 Quantity);
 
 	// Removes 1 quantity of item. Returns false if item does not exist.
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
@@ -48,7 +51,7 @@ public:
 	bool RemoveItemInQuantity(UItem* ToRemove, int32 Quantity);
 
 	UFUNCTION(BlueprintPure, Category = "Inventory")
-	TArray<UItem*> GetItemsInTab(EInventoryTabEnum tab) const;
+	TArray<UInvEntry*> GetItemEntriesInTab(EInventoryTabEnum tab) const;
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	bool HasItem(UItem* ToFind) const;
 	UFUNCTION(BlueprintPure, Category = "Inventory")

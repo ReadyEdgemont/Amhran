@@ -36,6 +36,7 @@ void AAmhranPlayer::SetupPlayerInputComponent(UInputComponent* InputComponent)
 	InputComponent->BindAction("Jump", IE_Released, this, &AAmhranPlayer::OnStopJump);
 	InputComponent->BindAction("Fire1", IE_Pressed, this, &AAmhranPlayer::OnFire1);
 	InputComponent->BindAction("Fire2", IE_Pressed, this, &AAmhranPlayer::OnFire2);
+	InputComponent->BindAction("Use", IE_Pressed, this, &AAmhranPlayer::OnUse);
 }
 
 void AAmhranPlayer::WalkForward(float Value)
@@ -81,16 +82,68 @@ void AAmhranPlayer::OnFire1()
 {
 	ACharacterPlus *hit = NULL;
 	if (CanAttack) {
-		hit = UCombatLibrary::MeleeAttackCheckSingle(250, 30, this);
+		hit = UCombatLibrary::MeleeAttackCheckSingle(GetEquippedWeapon()->GetAttackRange(), 30, this);
 	}
 	if (hit) {
-		hit->Damage(10);
+		UWeapon* wep = GetEquippedWeapon();
+		float dmg = UCombatLibrary::ComputeDamageFromWeapon(Skills, wep);
+		hit->Damage(dmg);
+		UCombatLibrary::AddExpFromDamage(dmg, wep, Skills);
 	}
 }
 
 void AAmhranPlayer::OnFire2() {
 	CharacterPlusNotifiedParryInitiate();
 	UCombatLibrary::Parry(200, 30, false, this);		// TODO: Call this from an AnimMontage, block parry?
+}
+
+void AAmhranPlayer::OnUse() {
+	UWorld *curWorld = GetWorld();
+		// https://answers.unrealengine.com/questions/3446/how-would-i-use-line-trace-in-c.html
+	FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("RV_Trace")), true, this);
+	TraceParams.bTraceComplex = true;
+	TraceParams.bTraceAsyncScene = true;
+	TraceParams.bReturnPhysicalMaterial = false;
+	TraceParams.AddIgnoredActor(this);
+
+	//Re-initialize hit info
+	FHitResult Hit(ForceInit);
+	FVector StartTrace; //= Instigator->GetActorLocation();
+	//FVector ShootDir; //= Instigator->GetActorRotation().Vector();
+	FRotator ShootDir;
+	GetActorEyesViewPoint(StartTrace, ShootDir);
+	const FVector EndTrace = StartTrace + ShootDir.Vector() * PLAYER_USE_RANGE;
+
+		// Container Trace
+	curWorld->LineTraceSingleByChannel(
+		Hit,			//result
+		StartTrace,		//start
+		EndTrace,		//end
+		COLLISION_CONTAINER,	//collision channel
+		TraceParams);
+	AActor *hitActor = Hit.GetActor();
+	if (hitActor) {
+		ACharacterPlus *hitCharacter = Cast<ACharacterPlus>(hitActor);
+		if (hitCharacter) {
+			PlayerNotifiedContainerOpened(hitCharacter->GetInventory());
+		}
+	}
+		// Dialogue Initiation Trace
+	else {
+		curWorld->LineTraceSingleByChannel(
+			Hit,			//result
+			StartTrace,		//start
+			EndTrace,		//end
+			ECC_Pawn,		//collision channel
+			TraceParams);
+		hitActor = Hit.GetActor();
+		if (hitActor) {
+			AnpcCharacter *hitNPC = Cast<AnpcCharacter>(hitActor);
+			if (hitNPC && !hitNPC->IsDead() && !hitNPC->IsCharacterHostileToCharacter(this)) {
+				PlayerNotifiedDialogueInitiated(hitNPC);
+			}
+		}
+	}
 }
 
 void AAmhranPlayer::Kill() {

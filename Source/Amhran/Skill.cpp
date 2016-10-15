@@ -5,31 +5,35 @@
 
 USkill::USkill() {
 	curLevel = 1;
-	curExp = 0;
+	curExp = 0.0;
 }
 
 USkill::USkill(int32 Score) {
 	curLevel = Score >= 1 ? Score : 1;
-	curExp = 0;
+	curExp = 0.0;
 }
 
 int32 USkill::GetCurrentLevel() const {
 	return curLevel;
 }
 
-int32 USkill::GetCurrentExp() const {
+float USkill::GetCurrentExp() const {
 	return curExp;
 }
 
 int32 USkill::GetCurrentExpCeiling() const {
-	return (int32)(pow((double)curLevel, SKILL_EXP_GROWTH) * SKILL_MULT_GROWTH) + SKILL_OFFSET;	// MULT_GROWTH * (Level ^ EXP_GROWTH) + OFFSET
+	return (pow((float)curLevel, SKILL_EXP_GROWTH) * SKILL_MULT_GROWTH) + SKILL_OFFSET;	// MULT_GROWTH * (Level ^ EXP_GROWTH) + OFFSET
 }
 
-int32 USkill::GetExpToNextLevel() const {
+float USkill::GetExpToNextLevel() const {
 	return GetCurrentExpCeiling() - curExp;
 }
 
-void USkill::AddExperience(int32 ExpIncrease) {
+float USkill::GetCurrentExpPercentage() const {
+	return GetCurrentExp() / GetCurrentExpCeiling();
+}
+
+void USkill::AddExperience(float ExpIncrease) {
 	curExp += ExpIncrease;
 	while (curExp >= GetCurrentExpCeiling()) {	//Level up as much as is appropriate
 		levelUp();

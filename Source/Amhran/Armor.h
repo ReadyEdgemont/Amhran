@@ -20,10 +20,10 @@ public:
 	UFUNCTION()
 	float getProtection() const;
 	UFUNCTION(BlueprintPure, Category = "Equipment")
-	EArmorTypeEnum GetArmorType() const;
+	EEquipmentTypeEnum GetArmorType() const;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Armor)
-	EArmorTypeEnum ArmorType;
+	EEquipmentTypeEnum ArmorType;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Armor)
 	float Protection;
 	

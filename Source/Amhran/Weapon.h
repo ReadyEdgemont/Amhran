@@ -16,6 +16,11 @@ public:
 	UWeapon();
 	UFUNCTION()
 	void Init(const UItem * other) override;
+
+	UFUNCTION(BlueprintPure, Category = "Weapon")
+	float GetAttackRange() const;
+	UFUNCTION(BlueprintPure, Category = "Weapon")
+	float GetDamage() const;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	EWeaponTypeEnum WeaponType;

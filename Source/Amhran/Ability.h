@@ -16,10 +16,12 @@ class AMHRAN_API UAbility : public UObject
 public:
 	UAbility();
 	UAbility(int32 Score);
-	UFUNCTION(BlueprintPure, Category = Skills)
+	UFUNCTION(BlueprintPure, Category = "Skills")
 	int32 GetScore() const;
-	UFUNCTION(BlueprintCallable, Category = Skills)
+	UFUNCTION(BlueprintCallable, Category = "Skills")
 	void SetScore(int32 NewScore);
+	UFUNCTION(BlueprintCallable, Category = "Skills")
+	void Increase();
 private:
 	UPROPERTY(EditAnywhere, Category = "Vitals")
 	int32 AbilityScore;

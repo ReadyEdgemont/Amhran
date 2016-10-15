@@ -18,3 +18,7 @@ int32 UAbility::GetScore() const {
 void UAbility::SetScore(int32 NewScore) {
 	AbilityScore = NewScore;
 }
+
+void UAbility::Increase() {
+	AbilityScore++;
+}

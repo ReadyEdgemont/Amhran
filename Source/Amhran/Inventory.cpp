@@ -7,6 +7,10 @@ UInventory::UInventory() {
 	// Nothing to see here.
 }
 
+void UInventory::DEBUGPrintItemCount() const {
+	UE_LOG(LogTemp, Warning, TEXT("Inventory Count: %d"), items.Num());
+}
+
 void UInventory::AssignFromLoadout(UClass *other) {
 	ULoadout* loadout = Cast<ULoadout>(other->GetDefaultObject());
 	if (!loadout)
@@ -19,23 +23,23 @@ void UInventory::AssignFromLoadout(UClass *other) {
 	}
 }
 
-void UInventory::AddItemU(UClass* ToAdd) {
-	AddItemInQuantityU(ToAdd, 1);
+int32 UInventory::AddItemU(UClass* ToAdd) {
+	return AddItemInQuantityU(ToAdd, 1);
 }
 
-void UInventory::AddItemInQuantityU(UClass* ToAdd, int32 Quantity) {
+int32 UInventory::AddItemInQuantityU(UClass* ToAdd, int32 Quantity) {
 	UItem* item = Cast<UItem>(ToAdd->GetDefaultObject());
-	AddItemInQuantity(item, Quantity);
+	return AddItemInQuantity(item, Quantity);
 }
 
-void UInventory::AddItem(UItem* ToAdd) {
-	AddItemInQuantity(ToAdd, 1);
+int32 UInventory::AddItem(UItem* ToAdd) {
+	return AddItemInQuantity(ToAdd, 1);
 }
 
-void UInventory::AddItemInQuantity(UItem* ToAdd, int32 Quantity) {
+int32 UInventory::AddItemInQuantity(UItem* ToAdd, int32 Quantity) {
 	if (Quantity < 0) {
 		UE_LOG(LogTemp, Warning, TEXT("Warning: Attempt to add negative quantity from inventory! Did you mean to use RemoveItem functions?"));
-		return;
+		return 0;
 	}
 	FName NameToAdd = ToAdd->GetName();
 	if (items.Contains(NameToAdd)) {
@@ -46,6 +50,7 @@ void UInventory::AddItemInQuantity(UItem* ToAdd, int32 Quantity) {
 		newEntry->Init(ToAdd, Quantity);
 		items.Add(NameToAdd, newEntry);
 	}
+	return items[NameToAdd]->GetQuantity();
 }
 
 bool UInventory::RemoveItemU(UClass* ToRemove) {
@@ -80,12 +85,12 @@ bool UInventory::RemoveItemInQuantity(UItem* ToRemove, int32 Quantity) {
 	return true;
 }
 
-TArray<UItem*> UInventory::GetItemsInTab(EInventoryTabEnum tab) const {		// TODO
+TArray<UInvEntry*> UInventory::GetItemEntriesInTab(EInventoryTabEnum tab) const {		// TODO
 	TArray<uint8> targetTypes = getItemTypesInTab(tab);		// Tragically UE4 won't let us get a TArray of enums...
-	TArray<UItem*> results;
+	TArray<UInvEntry*> results;
 	for (auto& elem : items) {		// For each item . . .
-		UItem* found = elem.Value->GetItem();
-		if (targetTypes.Contains((uint8)(found->GetType()))) {		// Add the found item to our result if it's in our tab
+		UInvEntry* found = elem.Value;
+		if (targetTypes.Contains((uint8)(found->GetItem()->GetType()))) {		// Add the found item to our result if it's in our tab
 			results.Add(found);
 		}
 	}

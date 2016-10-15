@@ -18,3 +18,11 @@ void UWeapon::Init(const UItem * other) {
 	Speed = otherW->Speed;
 	Range = otherW->Range;
 }
+
+float UWeapon::GetAttackRange() const {
+	return Range;
+}
+
+float UWeapon::GetDamage() const {
+	return Damage;
+}

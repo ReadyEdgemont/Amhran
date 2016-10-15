@@ -15,15 +15,18 @@ class AMHRAN_API UEquipment : public UObject
 {
 	GENERATED_BODY()
 public:
+	UEquipment();
 	UFUNCTION(BlueprintCallable, Category = "Equipment")
 	void Assign(UEquipment *other);
 	UFUNCTION()
 	void AssignFromLoadout(UClass *other);
 
-	UFUNCTION()
-	void equipWeapon(UClass *w);
-	UFUNCTION()
-	void equipArmor(UClass *a);
+	UFUNCTION(BlueprintCallable, Category = "Equipment")		// TODO: Hook up correctly to ACharacterPlus and Inventory
+	void EquipU(UClass *ToEquip);
+	UFUNCTION(BlueprintCallable, Category = "Equipment")
+	void Equip(UItem *ToEquip);
+	UFUNCTION(BlueprintCallable, Category = "Equipment")
+	UItem* Unequip(EEquipmentTypeEnum Slot);
 
 	UFUNCTION(BlueprintPure, Category = "Equipment")
 	UWeapon* GetWeapon() const;
@@ -46,9 +49,27 @@ public:
 
 protected:
 	UFUNCTION()
-	void initWeapon(UWeapon* w, UClass* other);
+	void equipWeaponU(UClass *w);
 	UFUNCTION()
-	void initArmor(UArmor* a, UClass* other);
+	void equipArmorU(UClass *a);
+	UFUNCTION()
+	void equipWeapon(UWeapon *w);
+	UFUNCTION()
+	void equipArmor(UArmor *a);
+
+	UFUNCTION()
+	void initWeaponU(UWeapon * & w, UClass* other);
+	UFUNCTION()
+	void initArmorU(UArmor * & a, UClass* other);
+	UFUNCTION()
+	void initWeapon(UWeapon * & w, UWeapon* other);
+	UFUNCTION()
+	void initArmor(UArmor * & a, UArmor* other);
+
+	UFUNCTION()
+	UWeapon* unequipWeaponSlot(UWeapon * & wSlot);
+	UFUNCTION()
+	UArmor* unequipArmorSlot(UArmor * & aSlot);
 
 	UPROPERTY()
 		UWeapon* Weapon;

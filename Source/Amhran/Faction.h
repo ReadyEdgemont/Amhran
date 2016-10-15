@@ -12,6 +12,20 @@
 /**
  * 
  */
+
+USTRUCT()
+struct FInnerMap {
+	TArray<bool> imap;
+	GENERATED_BODY()
+};
+
+UENUM()
+enum class EFactions : uint8 {
+	PLAYER			UMETA(DisplayName = "Player"),
+	CIVILIANS		UMETA(DisplayName = "Civilians"),
+	BANDITS			UMETA(DisplayName = "Bandits")
+};
+
 UCLASS()
 class AMHRAN_API UFaction : public UObject
 {
@@ -22,13 +36,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Faction")
 	bool IsFactionHostileToFaction(int32 id1, int32 id2);
 
-	static enum { PLAYER = 0, CIVILIANS = 1, BANDITS = 2 };
-
 protected:
+	UFUNCTION()
 	void addHostility(int32 id1, int32 id2);
+	UFUNCTION()
 	void correctIds(int32 & id1, int32 & id2);
 	
-	bool map[NUMFACTIONS][NUMFACTIONS];
+	UPROPERTY()
+	TArray<FInnerMap> map;
 };
 
 //#endif

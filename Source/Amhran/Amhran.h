@@ -33,8 +33,9 @@ enum class EWeaponTypeEnum : uint8
 };
 
 UENUM(BlueprintType)
-enum class EArmorTypeEnum : uint8
+enum class EEquipmentTypeEnum : uint8
 {
+	Weapon		UMETA(DisplayName = "Weapon"),
 	Head		UMETA(DisplayName = "Head"),
 	Torso 		UMETA(DisplayName = "Torso"),
 	Arms		UMETA(DisplayName = "Arms"),
@@ -67,6 +68,7 @@ enum class EInventoryTabEnum : uint8
 
 //Channel Definitions
 #define COLLISION_PROJECTILE    ECC_GameTraceChannel1
+#define COLLISION_CONTAINER    ECC_GameTraceChannel2
 
 //AI Detection Values
 #define TIGHT_DETECTION_CONE 25.0
@@ -98,11 +100,13 @@ enum class EInventoryTabEnum : uint8
 
 #define DETECTION_COOLDOWN 3.5 //Detection lost per second after target leaves view (or detection gain is otherwise below minimum)
 
-const double SKILL_EXP_GROWTH = 1.65;
-const int32 SKILL_MULT_GROWTH = 3;
-const int32 SKILL_OFFSET = 65;
+#define SKILL_EXP_GROWTH 1.65
+#define SKILL_MULT_GROWTH 1.0
+#define SKILL_OFFSET 65.0
 
-#define DEFAULT_WEAPON_SKILL_DMG_MOD 0.03	// Default % damage boost to weapons per level in appropriate skill.		0.03 = 3% / level
+#define PLAYER_USE_RANGE 500
+
+#define WEAPON_SKILL_DMG_MOD 0.03	// Default % damage boost to weapons per level in appropriate skill.		0.03 = 3% / level
 
 #define ABILITY_DEFAULT_VALUE 10			//Default value for ability scores (STR, CON, DEX, etc.)
 #define SKILL_DEFAULT_VALUE 1

@@ -5,6 +5,7 @@
 
 UArmor::UArmor() {
 	Type = EItemTypeEnum::Armor;
+	ArmorType = EEquipmentTypeEnum::Head;
 }
 
 void UArmor::Init(const UItem * other) {
@@ -18,6 +19,6 @@ float UArmor::getProtection() const {
 	return Protection;
 }
 
-EArmorTypeEnum UArmor::GetArmorType() const {
+EEquipmentTypeEnum UArmor::GetArmorType() const {
 	return ArmorType;
 }

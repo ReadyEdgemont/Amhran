@@ -11,24 +11,25 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class AMHRAN_API UInvEntry : public UObject
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void Init(UItem* i, int32 q);
-	UFUNCTION()
+	UFUNCTION(BlueprintPure, Category = "Inventory")
 	UItem* GetItem() const;
-		// Useless?
-	UFUNCTION()
+	UFUNCTION(BlueprintPure, Category = "Inventory")
 	FName GetName() const;
-	UFUNCTION()
+	UFUNCTION(BlueprintPure, Category = "Inventory")
 	int32 GetQuantity() const;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void AddQuantity(int32 q);
 
 private:
+	UPROPERTY()
 	UItem* Item;
+	UPROPERTY()
 	int32 Quantity;
 };

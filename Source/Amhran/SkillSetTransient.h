@@ -19,13 +19,14 @@ class AMHRAN_API USkillSetTransient : public UObject
 public:
 	USkillSetTransient();	//Meaningless. DO NOT USE!!!
 	USkillSetTransient(const int32 Level, const int32 Strength, const int32 Dexterity, const int32 Constitution,
-			const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons);
+			const int32 Intelligence, const int32 Wisdom, const int32 Charisma, const int32 LightWeapons,
+			const int32 Parry, const int32 Transmutation, const int32 Speechcraft);
 
 	UFUNCTION()
 	void makeAbilityArray(const int32 Strength, const int32 Dexterity, const int32 Constitution,
 			const int32 Intelligence, const int32 Wisdom, const int32 Charisma);
 	UFUNCTION()
-	void makeSkillArray(const int32 LightWeapons);
+	void makeSkillArray(const int32 LightWeapons, const int32 Parry, const int32 Transmutation, const int32 Speechcraft);
 	/*UFUNCTION()
 	void makeWeaponSkillArray(const int32 Smithing);*/
 

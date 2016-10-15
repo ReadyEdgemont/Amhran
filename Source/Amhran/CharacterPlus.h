@@ -46,6 +46,8 @@ public:
 	virtual void Kill();
 
 	UFUNCTION(BlueprintPure, Category = "Stats")
+	USkillSet* GetSkillSet() const;
+	UFUNCTION(BlueprintPure, Category = "Stats")
 	int32 GetCurrentLevel() const;
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	UAbility* GetAbility(FName AbilityName) const;
@@ -60,9 +62,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	float GetHealth() const;
 	UFUNCTION(BlueprintPure, Category = "Stats")
+	int32 GetMaxHealth() const;
+	UFUNCTION(BlueprintPure, Category = "Stats")
 	float GetSpiritPercentage() const;
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	float GetSpirit() const;
+	UFUNCTION(BlueprintPure, Category = "Stats")
+	int32 GetMaxSpirit() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void RecalculateMaxHealth();
@@ -74,8 +80,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Faction")
 	bool IsCharacterHostileToFaction(int32 ID) const;
 
-	UFUNCTION(BlueprintCallable, Category = "Items")
-	void Equip(UClass * toEquip);
+	UFUNCTION(BlueprintCallable, Category = "Equipment")
+	void EquipU(UClass * ToEquip);
+	UFUNCTION(BlueprintCallable, Category = "Equipment")
+	void Equip(UItem * ToEquip);
 
 	UFUNCTION(BlueprintPure, Category = "Items")
 	UWeapon* GetEquippedWeapon() const;
@@ -101,8 +109,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	float GetRawArmorValue() const;
 
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	UInventory* GetInventory() const;
+
 	UFUNCTION(BlueprintCallable, Category = Faction)
 	int32 GetFactionID() const;
+
+	UFUNCTION(BlueprintPure, Category = "Stats")
+	bool IsDead() const;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	bool CanAttack;
@@ -127,40 +141,52 @@ protected:
 
 	//UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
 	//int32 MaxHealthOverride;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
+	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
 	int32 MaxHealth;
 	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
 	float Health;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadOnly, Category = "Vitals")
+	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
 	int32 MaxSpirit;
 	UPROPERTY(SaveGame, BlueprintReadOnly, Category = "Vitals")
 	float Spirit;
 
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	int32 Level;
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Strength;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Dexterity;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Constitution;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Intelligence;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Wisdom;
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Abilities")
+	UPROPERTY(EditAnywhere, Category = "Abilities")
 	int32 Charisma;
 
-	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(EditAnywhere, Category = "Skills")
 	int32 LightWeapons;
+	UPROPERTY(EditAnywhere, Category = "Skills")
+	int32 Parry;
+	UPROPERTY(EditAnywhere, Category = "Skills")
+	int32 Transmutation;
+	UPROPERTY(EditAnywhere, Category = "Skills")
+	int32 Speechcraft;
 
 	UPROPERTY(EditAnywhere, SaveGame, Category = "Faction")
 	int32 FactionID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-	UClass* Loadout;		// The default equipment & inventory information for this character. Only store a Loadout-derived object here!
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")		// The default equipment & inventory information for this character. Only store a Loadout-derived object here!
+	UClass* Loadout;
 	UPROPERTY(BlueprintReadWrite, SaveGame, Category = "Equipment")
 	UEquipment* Equiped;
 	UPROPERTY(BlueprintReadOnly, SaveGame, Category = "Inventory")
 	UInventory* Inventory;
+
+	UPROPERTY()
+	bool isDeadPlus;
 	
+	UPROPERTY()
 	UFaction *staticFaction;
 };

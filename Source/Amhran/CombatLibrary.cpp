@@ -94,10 +94,11 @@ bool UCombatLibrary::Parry(float Range, float SweepHalfAngle, bool CanMultiParry
 	return false;
 }
 
-int32 UCombatLibrary::ComputeDamageFromRaw(int32 RawDamage, USkillSet* Skills, UWeapon* Weapon) {
-	return RawDamage + (RawDamage * DEFAULT_WEAPON_SKILL_DMG_MOD); // TODO: Create equation w/ STR and crap
+float UCombatLibrary::ComputeDamageFromWeapon(USkillSet* Skills, UWeapon* Weapon) {
+	float rawDamage = Weapon->GetDamage();
+	return (rawDamage + (rawDamage * WEAPON_SKILL_DMG_MOD)) * (((float)Skills->GetAbility("Strength")->GetScore() / 10.0) );
 }
 
-void UCombatLibrary::AddExpFromDamage(int32 DamageDealt, UWeapon* Weapon) {
-	//AddExperience(DamageDealt); // TODO: Create equation
+void UCombatLibrary::AddExpFromDamage(float DamageDealt, UWeapon* Weapon, USkillSet* Skills) {
+	Skills->GetSkill("Light Weapons")->AddExperience(DamageDealt);
 }
